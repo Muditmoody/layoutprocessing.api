@@ -36,7 +36,7 @@ jobs:
     - name: Build and push Docker image for WebApp
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       with:
-        context: .
+        file: ./src/PWCLayoutProcessingWebApp/dockerfile
         push: true
         tags: ${{ steps.meta_dataapp.outputs.tags }}
         labels: ${{ steps.meta_dataapp.outputs.labels }}
