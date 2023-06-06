@@ -2,10 +2,21 @@
 
 namespace PWCLayoutProcessingWebApp.BusinessLogic
 {
+#nullable enable
+
+    /// <summary>
+    /// The database provider.
+    /// </summary>
     public class DatabaseProvider
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseProvider"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="logger">The logger.</param>
         public DatabaseProvider(IConfiguration configuration, ILogger<DatabaseProvider> logger)
         {
             _logger = logger;
@@ -13,6 +24,10 @@ namespace PWCLayoutProcessingWebApp.BusinessLogic
             this.TestConnection();
         }
 
+        /// <summary>
+        /// Tests the connection.
+        /// </summary>
+        /// <returns>A bool.</returns>
         public bool TestConnection()
         {
             var success = true;
@@ -40,11 +55,21 @@ namespace PWCLayoutProcessingWebApp.BusinessLogic
             return success;
         }
 
+        /// <summary>
+        /// Creates the connection.
+        /// </summary>
+        /// <returns>A SqlConnection.</returns>
         private SqlConnection CreateConnection()
         {
             return new SqlConnection(_configuration.GetConnectionString("layoutProcessing"));
         }
 
+        /// <summary>
+        /// Executes the query.
+        /// </summary>
+        /// <param name="strQuery">The str query.</param>
+        /// <param name="mapper">The mapper.</param>
+        /// <returns>A list of TS.</returns>
         public List<T> ExecuteQuery<T>(string strQuery, Func<SqlDataReader, T> mapper)
         {
             var retObj = new List<T>();

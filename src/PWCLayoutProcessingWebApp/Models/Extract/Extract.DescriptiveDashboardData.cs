@@ -5,116 +5,225 @@ namespace PWCLayoutProcessingWebApp.Models.Extract
 {
     public class ExtractDescriptiveDashboardData : IExtractObjects
     {
+        /// <summary>
+        /// Gets or sets the notification.
+        /// </summary>
         [JsonProperty(PropertyName = "Notification")]
         [ModelViewColumn(DisplayName = "Notification", ToDisplay = true)]
         public string Notification { get; set; }
 
-
+        /// <summary>
+        /// Gets or sets the item.
+        /// </summary>
         [JsonProperty(PropertyName = "Item")]
         [ModelViewColumn(DisplayName = "Item", ToDisplay = true)]
         public int Item { get; set; }
 
+        /// <summary>
+        /// Gets or sets the task.
+        /// </summary>
         [JsonProperty(PropertyName = "Task")]
         [ModelViewColumn(DisplayName = "Task", ToDisplay = true)]
         public int Task { get; set; }
 
+        /// <summary>
+        /// Gets or sets the material.
+        /// </summary>
         [JsonProperty(PropertyName = "Material")]
         [ModelViewColumn(DisplayName = "Material", ToDisplay = true)]
         public string Material { get; set; }
 
+        /// <summary>
+        /// Gets or sets the created date.
+        /// </summary>
         [JsonProperty(PropertyName = "Created_On")]
         [ModelViewColumn(DisplayName = "Created_On", ToDisplay = true)]
         public DateTime CreatedDate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
         [JsonProperty(PropertyName = "Description")]
         [ModelViewColumn(DisplayName = "Description", ToDisplay = true)]
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets or sets the category.
+        /// </summary>
         [JsonProperty(PropertyName = "Category")]
         [ModelViewColumn(DisplayName = "Category", ToDisplay = true)]
         public string Category { get; set; }
 
+        /// <summary>
+        /// Gets or sets the completed date.
+        /// </summary>
         [JsonProperty(PropertyName = "Completed_On")]
         [ModelViewColumn(DisplayName = "Completed_On", ToDisplay = true)]
         public DateTime? CompletedDate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the task text.
+        /// </summary>
         [JsonProperty(PropertyName = "Task_Text")]
         [ModelViewColumn(DisplayName = "Task_Text", ToDisplay = true)]
         public string TaskText { get; set; }
 
+        /// <summary>
+        /// Gets or sets the code group.
+        /// </summary>
         [JsonProperty(PropertyName = "Code_Group")]
         [ModelViewColumn(DisplayName = "Code_Group", ToDisplay = true)]
         public string CodeGroup { get; set; }
 
+        /// <summary>
+        /// Gets or sets the code group text.
+        /// </summary>
         [JsonProperty(PropertyName = "Task_Group_Text")]
         [ModelViewColumn(DisplayName = "Task_Group_Text", ToDisplay = true)]
         public string CodeGroupText { get; set; }
 
+        /// <summary>
+        /// Gets or sets the task code.
+        /// </summary>
         [JsonProperty(PropertyName = "Task_Code")]
         [ModelViewColumn(DisplayName = "Task_Code", ToDisplay = true)]
         public string TaskCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the task code text.
+        /// </summary>
         [JsonProperty(PropertyName = "Task_Code_Text")]
         [ModelViewColumn(DisplayName = "Task_Code_Text", ToDisplay = true)]
         public string TaskCodeText { get; set; }
 
+        /// <summary>
+        /// Gets or sets the planned start.
+        /// </summary>
         [JsonProperty(PropertyName = "Task_Planned_Start")]
         [ModelViewColumn(DisplayName = "Task_Planned_Start", ToDisplay = true)]
         public DateTime? PlannedStart { get; set; }
 
+        /// <summary>
+        /// Gets or sets the planned finish.
+        /// </summary>
         [JsonProperty(PropertyName = "Task_Planned_Finish")]
         [ModelViewColumn(DisplayName = "Task_Planned_Finish", ToDisplay = true)]
         public DateTime? PlannedFinish { get; set; }
 
+        /// <summary>
+        /// Gets or sets the supplier vendor code.
+        /// </summary>
         [JsonProperty(PropertyName = "Supplier_Vendor")]
         [ModelViewColumn(DisplayName = "Supplier_Vendor", ToDisplay = true)]
         public string SupplierVendorCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the task owner code.
+        /// </summary>
         [JsonProperty(PropertyName = "Task_Owner")]
         [ModelViewColumn(DisplayName = "Task_Owner", ToDisplay = true)]
         public string TaskOwnerCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the task status code.
+        /// </summary>
         [JsonProperty(PropertyName = "Task_Status")]
         [ModelViewColumn(DisplayName = "Task_Status", ToDisplay = true)]
         public string TaskStatusCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the coding code.
+        /// </summary>
         [JsonProperty(PropertyName = "Coding")]
         [ModelViewColumn(DisplayName = "Coding", ToDisplay = true)]
         public string CodingCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the engine program code.
+        /// </summary>
         [JsonProperty(PropertyName = "Engine")]
         [ModelViewColumn(DisplayName = "Engine", ToDisplay = true)]
         public string EngineProgramCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the damage code.
+        /// </summary>
         [JsonProperty(PropertyName = "Damage_Code")]
         [ModelViewColumn(DisplayName = "Damage_Code", ToDisplay = true)]
         public string DamageCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the cause code.
+        /// </summary>
         [JsonProperty(PropertyName = "Cause_Code")]
         [ModelViewColumn(DisplayName = "Cause_Code", ToDisplay = true)]
         public string CauseCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether task is completed.
+        /// </summary>
         [JsonProperty(PropertyName = "IsTaskCompleted")]
         [ModelViewColumn(DisplayName = "IsTaskCompleted", ToDisplay = true)]
         public bool IsTaskCompleted { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether item is completed.
+        /// </summary>
         [JsonProperty(PropertyName = "IsItemCompleted")]
         [ModelViewColumn(DisplayName = "IsItemCompleted", ToDisplay = true)]
         public bool IsItemCompleted { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether is turnback.
+        /// </summary>
         [JsonProperty(PropertyName = "IsTurnback")]
         [ModelViewColumn(DisplayName = "IsTurnback", ToDisplay = true)]
         public bool IsTurnback { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether is life.
+        /// </summary>
         [JsonProperty(PropertyName = "IsLife")]
         [ModelViewColumn(DisplayName = "IsLife", ToDisplay = true)]
         public bool IsLife { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtractDescriptiveDashboardData"/> class.
+        /// </summary>
         public ExtractDescriptiveDashboardData()
         {
-
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtractDescriptiveDashboardData"/> class.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="notification">The notification.</param>
+        /// <param name="item">The item.</param>
+        /// <param name="task">The task.</param>
+        /// <param name="material">The material.</param>
+        /// <param name="createdDate">The created date.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="category">The category.</param>
+        /// <param name="completedDate">The completed date.</param>
+        /// <param name="taskText">The task text.</param>
+        /// <param name="codeGroup">The code group.</param>
+        /// <param name="codeGroupText">The code group text.</param>
+        /// <param name="taskCode">The task code.</param>
+        /// <param name="taskCodeText">The task code text.</param>
+        /// <param name="plannedStart">The planned start.</param>
+        /// <param name="plannedFinish">The planned finish.</param>
+        /// <param name="supplierVendorCode">The supplier vendor code.</param>
+        /// <param name="taskOwnerCode">The task owner code.</param>
+        /// <param name="taskStatusCode">The task status code.</param>
+        /// <param name="codingCode">The coding code.</param>
+        /// <param name="engineProgramCode">The engine program code.</param>
+        /// <param name="damageCode">The damage code.</param>
+        /// <param name="causeCode">The cause code.</param>
+        /// <param name="isTaskCompleted">If true, is task completed.</param>
+        /// <param name="isItemCompleted">If true, is item completed.</param>
+        /// <param name="isTurnback">If true, is turnback.</param>
+        /// <param name="isLife">If true, is life.</param>
         public ExtractDescriptiveDashboardData(int id, string notification, int item, int task, string material, DateTime createdDate, string description,
             string category, DateTime completedDate, string taskText, string codeGroup, string codeGroupText, string taskCode, string taskCodeText,
             DateTime plannedStart, DateTime plannedFinish, string supplierVendorCode, string taskOwnerCode, string taskStatusCode, string codingCode,
@@ -148,7 +257,11 @@ namespace PWCLayoutProcessingWebApp.Models.Extract
             IsLife = isLife;
         }
 
-
+        /// <summary>
+        /// Maps the Entity.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>An ExtractDescriptiveDashboardData.</returns>
         public static ExtractDescriptiveDashboardData Map(Reporting.DescriptiveDashboardData item) => new ExtractDescriptiveDashboardData
         {
             Category = item.Category,
@@ -180,13 +293,3 @@ namespace PWCLayoutProcessingWebApp.Models.Extract
         };
     }
 }
-
-//#"Delete Columns" = Table.RemoveColumns(#"Expanded Column1",{"LayoutTaskId"}),
-//#"Changed Type" = Table.TransformColumnTypes(#"Expanded Column1",{{"Id", Int64.Type}, {"Notification", Int64.Type}, {"Item", Int64.Type}, {"LayoutTaskId", Int64.Type}, {"Task", Int64.Type}, {"Material", type text}, {"Created_On", type datetime}, {"Completed_On", type datetime}, {"TaskText", type text}, {"TaskCodeId", Int64.Type}, {"TaskCode", Int64.Type}, {"TaskCodeText", type text}, {"Planned_Start", type datetime}, {"Planned_Finish", type datetime}, {"SupplierVendorId", Int64.Type}, {"SupplierVendor", Int64.Type}, {"TaskOwnerId", Int64.Type}, {"TaskOwner", Int64.Type}, {"TaskStatusId", Int64.Type}, {"TaskStatus", type text}, {"DamageCodeId", Int64.Type}, {"DamageCode", Int64.Type}, {"CauseCodeId", Int64.Type}, {"CauseCode", type text}, {"GroupCodeId", Int64.Type}, {"GroupCode", type text}, {"CategoryId", Int64.Type}, {"Category", type text}, {"Coding", type text}, {"Engine", type text}, {"GeneralCode", type any}, {"IsTaskCompleted", type logical}, {"IsItemCompleted", type logical}, {"IsTurnback", type logical}, {"IsLife", type logical}, {"IsPlanning", type logical}, {"Available", Int64.Type}, {"runDate", type datetime}}),
-//#"Add Not_Item" = Table.AddColumn(#"Changed Type", "Not_Item", each [Notification]&"_"&[Item]),
-//#"Changed Type Date" = Table.TransformColumnTypes(#"Add Not_Item",{{"Created_On", type date}, {"Completed_On", type date}}),
-//#"Add TaskDuration" = Table.AddColumn(#"Changed Type Date", "Task_Duration", each  Duration.Days ( [Completed_On] - [Created_On] ) +1),
-//#"Added Conditional Column" = Table.AddColumn(#"Add TaskDuration", "IsTaskCompleted_num", each if [IsTaskCompleted] = "TRUE" then 1 else 0),
-//#"Changed Type2" = Table.TransformColumnTypes(#"Added Conditional Column",{{"IsTaskCompleted_num", type number}, {"Task_Duration", type number}}),
-//#"Added Custom1" = Table.AddColumn(#"Changed Type2", "Not_Item_Task", each [Notification]&"_"&[Item]&"_"&[Task]),
-//#"Changed Type3" = Table.TransformColumnTypes(#"Added Custom1",{{"IsTurnback", Percentage.Type}})

@@ -9,6 +9,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The cause code controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class CauseCodeController : ControllerBase
@@ -21,6 +24,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CauseCodeController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public CauseCodeController(ILogger<CauseCodeController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -39,6 +50,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the cause codes.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractCauseCode.</returns>
         [HttpGet("GetCauseCodes")]
         public IEnumerable<Extract.ExtractCauseCode> GetCauseCodes()
         {
@@ -57,6 +72,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractCauseCode.Map);
         }
 
+        /// <summary>
+        /// Gets the cause codes.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractCauseCode.</returns>
         [HttpGet("GetCauseCodeByName")]
         public IEnumerable<Extract.ExtractCauseCode> GetCauseCodes([FromQuery] IEnumerable<string> name)
         {
@@ -80,10 +100,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractCauseCode.Map);
         }
 
+        /// <summary>
+        /// Adds the cause code.
+        /// </summary>
+        /// <param name="causeCodes">The cause codes.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddCauseCode")]
         public ActionResult AddCauseCode(IEnumerable<Import.ImportCauseCode> causeCodes)
         {
-
             Func<CauseCode, Import.ImportCauseCode, bool> finder = (existingItem, importItem) =>
             {
                 return existingItem.CauseCodeName == importItem.CauseCodeName;

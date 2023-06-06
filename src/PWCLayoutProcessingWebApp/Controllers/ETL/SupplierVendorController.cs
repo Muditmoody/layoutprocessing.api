@@ -9,6 +9,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The supplier vendor controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class SupplierVendorController : ControllerBase
@@ -21,6 +24,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SupplierVendorController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public SupplierVendorController(ILogger<SupplierVendorController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -37,6 +48,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the supplier vendors.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractSupplierVendor.</returns>
         [HttpGet("GetSupplierVendors")]
         public IEnumerable<Extract.ExtractSupplierVendor> GetSupplierVendors()
         {
@@ -55,6 +70,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractSupplierVendor.Map);
         }
 
+        /// <summary>
+        /// Gets the supplier vendors by code.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractSupplierVendor.</returns>
         [HttpGet("GetSupplierVendorByCode")]
         public IEnumerable<Extract.ExtractSupplierVendor> GetSupplierVendorsByCode([FromQuery] IEnumerable<string> name)
         {
@@ -78,6 +98,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractSupplierVendor.Map);
         }
 
+        /// <summary>
+        /// Adds the supplier vendor.
+        /// </summary>
+        /// <param name="supplierVendors">The supplier vendors.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddSupplierVendor")]
         public ActionResult AddSupplierVendor(IEnumerable<Import.ImportSupplierVendor> supplierVendors)
         {

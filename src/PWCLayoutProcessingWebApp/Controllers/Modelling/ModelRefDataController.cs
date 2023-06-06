@@ -1,16 +1,19 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PWCLayoutProcessingWebApp.Data;
 using PWCLayoutProcessingWebApp.Models;
 using PWCLayoutProcessingWebApp.Models.Model;
 using PWCLayoutProcessingWebApp.BusinessLogic;
-using PWCLayoutProcessingWebApp.Models.Import;
 using Import = PWCLayoutProcessingWebApp.Models.Import;
 using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.Modelling
 {
+#nullable enable
+
+    /// <summary>
+    /// The model ref data controller.
+    /// </summary>
     [ApiController]
     [Route("api/model/[controller]")]
     public class ModelRefDataController : Controller
@@ -23,6 +26,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModelRefDataController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public ModelRefDataController(ILogger<ModelRefDataController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -41,6 +52,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
             }
         }
 
+        /// <summary>
+        /// Gets the group task code match map.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractGroupTaskCodeMatchMap.</returns>
         [HttpGet("GetGroupTaskCodeMatchMap")]
         public IEnumerable<Extract.ExtractGroupTaskCodeMatchMap> GetGroupTaskCodeMatchMap()
         {
@@ -59,6 +74,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
             return result?.Select(Extract.ExtractGroupTaskCodeMatchMap.Map);
         }
 
+        /// <summary>
+        /// Adds the seq add group task code match mapuence similarity.
+        /// </summary>
+        /// <param name="groupTaskCodeMatchMaps">The group task code match maps.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddGroupTaskCodeMatchMap")]
         public ActionResult AddSeqAddGroupTaskCodeMatchMapuenceSimilarity(IEnumerable<Import.ImportGroupTaskCodeMatchMap> groupTaskCodeMatchMaps)
         {

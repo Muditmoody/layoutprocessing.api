@@ -9,6 +9,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The coding code controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class CodingCodeController : ControllerBase
@@ -21,6 +24,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CodingCodeController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public CodingCodeController(ILogger<CodingCodeController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -37,6 +48,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the coding code.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractCodingCode.</returns>
         [HttpGet("GetCodingCodes")]
         public IEnumerable<Extract.ExtractCodingCode> GetCodingCode()
         {
@@ -55,6 +70,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractCodingCode.Map);
         }
 
+        /// <summary>
+        /// Gets the coding code.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractCodingCode.</returns>
         [HttpGet("GetCodingCodeByName")]
         public IEnumerable<Extract.ExtractCodingCode> GetCodingCode([FromQuery] IEnumerable<string> name)
         {
@@ -78,6 +98,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractCodingCode.Map);
         }
 
+        /// <summary>
+        /// Adds the coding code.
+        /// </summary>
+        /// <param name="codingCodes">The coding codes.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddCodingCode")]
         public ActionResult AddCodingCode(IEnumerable<Import.ImportCodingCode> codingCodes)
         {

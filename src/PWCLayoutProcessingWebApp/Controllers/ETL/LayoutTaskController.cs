@@ -1,7 +1,5 @@
 using System.Data;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using PWCLayoutProcessingWebApp.Data;
 using PWCLayoutProcessingWebApp.Models.ETL;
@@ -10,6 +8,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The layout task controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class LayoutTaskController : ControllerBase
@@ -22,6 +23,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LayoutTaskController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public LayoutTaskController(ILogger<LayoutTaskController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -38,6 +47,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the layout tasks.
+        /// </summary>
+        /// <param name="excludePlanning">If true, exclude planning.</param>
+        /// <returns>A list of Extract.ExtractLayoutProcessingTask.</returns>
         [HttpGet("GetLayoutTasks")]
         public IEnumerable<Extract.ExtractLayoutProcessingTask> GetLayoutTasks(bool excludePlanning = false)
         {
@@ -52,8 +66,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
             var removeItemWhenAnyInactive = inactiveItems.Where(e => e.IgnoreInactiveItem).Select(e => new { e.NotificationCode, e.ItemNumber }).ToList();
             var removeTaskWhenAnyInactive = inactiveItems.Where(e => e.IgnoreInactiveTask).Select(e => new { e.NotificationCode, e.ItemNumber }).ToList();
-
-
 
             result = _dbContext.LayoutProcessingTasks
                                .Include(e => e.TaskCode)
@@ -101,6 +113,12 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result.Select(Extract.ExtractLayoutProcessingTask.Map);
         }
 
+        /// <summary>
+        /// Gets the layout type.
+        /// </summary>
+        /// <param name="notificationRef">The notification ref.</param>
+        /// <param name="excludePlanning">If true, exclude planning.</param>
+        /// <returns>A list of Extract.ExtractLayoutProcessingTask.</returns>
         [HttpGet("GetLayoutTypeByNotification")]
         public IEnumerable<Extract.ExtractLayoutProcessingTask> GetLayoutType([FromQuery] IEnumerable<string> notificationRef, bool excludePlanning = false)
         {
@@ -114,7 +132,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
             var removeItemWhenAnyInactive = inactiveItems.Where(e => e.IgnoreInactiveItem).Select(e => new { e.NotificationCode, e.ItemNumber }).ToList();
             var removeTaskWhenAnyInactive = inactiveItems.Where(e => e.IgnoreInactiveTask).Select(e => new { e.NotificationCode, e.ItemNumber }).ToList();
-
 
             var result = default(List<LayoutProcessingTask>);
 
@@ -163,15 +180,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
                     });
                 }
             }
-
-
-            //result = result.Where(e => !(removeItemWhenAnyInactive.Any(i => i.NotificationCode == e.Layout.EngineProgram.NotificationCode
-            //                                                                      && i.ItemNumber == e.Layout.ItemNumber)
-            //                                      ));
-
-            //result = result.Where(e => !(removeTaskWhenAnyInactive.Any(i => i.NotificationCode == e.Layout.EngineProgram.NotificationCode
-            //                                                                      && i.ItemNumber == e.Layout.ItemNumber)
-            //                                      && e.TaskCode.TaskCodeName == "INAC"));
 
             result = result.Where(i => i.TaskCode.TaskCodeText != "DELETED, USE DEXPORTC-0010 INSTEAD").ToList();
             return result.Select(Extract.ExtractLayoutProcessingTask.Map);

@@ -9,6 +9,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The code group controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class CodeGroupController : ControllerBase
@@ -21,6 +24,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CodeGroupController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public CodeGroupController(ILogger<CodeGroupController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -37,6 +48,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the group codes.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractCodeGroup.</returns>
         [HttpGet("GetGroupCodes")]
         public IEnumerable<Extract.ExtractCodeGroup> GetGroupCodes()
         {
@@ -55,6 +70,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractCodeGroup.Map);
         }
 
+        /// <summary>
+        /// Gets the group codes.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractCodeGroup.</returns>
         [HttpGet("GetCauseCodeByName")]
         public IEnumerable<Extract.ExtractCodeGroup> GetGroupCodes([FromQuery] IEnumerable<string> name)
         {
@@ -78,6 +98,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractCodeGroup.Map);
         }
 
+        /// <summary>
+        /// Adds the code group.
+        /// </summary>
+        /// <param name="codeGroups">The code groups.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddCodeGroup")]
         public ActionResult AddCodeGroup(IEnumerable<Import.ImportCodeGroup> codeGroups)
         {

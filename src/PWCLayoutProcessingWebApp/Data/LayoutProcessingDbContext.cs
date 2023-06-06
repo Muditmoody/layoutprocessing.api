@@ -2,7 +2,6 @@
 using PWCLayoutProcessingWebApp.Models.ETL;
 using PWCLayoutProcessingWebApp.Models.Model;
 using PWCLayoutProcessingWebApp.Models.Mapping;
-using PWCLayoutProcessingWebApp.Models.Reporting;
 
 namespace PWCLayoutProcessingWebApp.Data
 {
@@ -11,6 +10,12 @@ namespace PWCLayoutProcessingWebApp.Data
         private ILogger _logger;
         private IConfiguration _configuration;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LayoutProcessingDbContext"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="options">The options.</param>
         public LayoutProcessingDbContext(ILogger<LayoutProcessingDbContext> logger, IConfiguration configuration, DbContextOptions<LayoutProcessingDbContext> options)
            : base(options)
         {
@@ -18,36 +23,114 @@ namespace PWCLayoutProcessingWebApp.Data
             this._configuration = configuration;
         }
 
+        /// <summary>
+        /// Ons the configuring.
+        /// </summary>
+        /// <param name="optionsBuilder">The options builder.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_configuration.GetConnectionString("layoutProcessing"));
         }
 
+        /// <summary>
+        /// Gets or sets the cause codes.
+        /// </summary>
         public virtual DbSet<CauseCode> CauseCodes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the group codes.
+        /// </summary>
         public virtual DbSet<CodeGroup> GroupCodes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the coding codes.
+        /// </summary>
         public virtual DbSet<CodingCode> CodingCodes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the damage codes.
+        /// </summary>
         public virtual DbSet<DamageCode> DamageCodes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the materials.
+        /// </summary>
         public virtual DbSet<Material> Materials { get; set; }
+
+        /// <summary>
+        /// Gets or sets the supplier vendors.
+        /// </summary>
         public virtual DbSet<SupplierVendor> SupplierVendors { get; set; }
+
+        /// <summary>
+        /// Gets or sets the task codes.
+        /// </summary>
         public virtual DbSet<TaskCode> TaskCodes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the task owners.
+        /// </summary>
         public virtual DbSet<TaskOwner> TaskOwners { get; set; }
+
+        /// <summary>
+        /// Gets or sets the task statuses.
+        /// </summary>
         public virtual DbSet<Models.ETL.TaskStatus> TaskStatuses { get; set; }
+
+        /// <summary>
+        /// Gets or sets the engine programs.
+        /// </summary>
         public virtual DbSet<EngineProgram> EnginePrograms { get; set; }
+
+        /// <summary>
+        /// Gets or sets the layout types.
+        /// </summary>
         public virtual DbSet<LayoutType> LayoutTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the layout processing tasks.
+        /// </summary>
         public virtual DbSet<LayoutProcessingTask> LayoutProcessingTasks { get; set; }
+
+        /// <summary>
+        /// Gets or sets the categories.
+        /// </summary>
         public virtual DbSet<Category> Categories { get; set; }
+
+        /// <summary>
+        /// Gets or sets the planning task codes.
+        /// </summary>
         public virtual DbSet<PlanningTaskCode> PlanningTaskCodes { get; set; }
 
+        /// <summary>
+        /// Gets or sets the sequence similarities.
+        /// </summary>
         public virtual DbSet<SequenceSimilarity> SequenceSimilarities { get; set; }
 
+        /// <summary>
+        /// Gets or sets the group task code matches.
+        /// </summary>
         public virtual DbSet<GroupTaskCodeMatchMap> GroupTaskCodeMatches { get; set; }
 
+        /// <summary>
+        /// Gets or sets the clean model inputs.
+        /// </summary>
         public virtual DbSet<CleanModelInput> CleanModelInputs { get; set; }
 
+        /// <summary>
+        /// Gets or sets the task duration predictions.
+        /// </summary>
         public virtual DbSet<TaskDurationPrediction> TaskDurationPredictions { get; set; }
 
+        /// <summary>
+        /// Gets or sets the inactive item configs.
+        /// </summary>
         public virtual DbSet<InactiveItemConfig> InactiveItemConfigs { get; set; }
 
+        /// <summary>
+        /// Ons the model creating.
+        /// </summary>
+        /// <param name="modelBuilder">The model builder.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CauseCode>(entity =>
@@ -258,7 +341,6 @@ namespace PWCLayoutProcessingWebApp.Data
                 entity.Property(e => e.GeneralCode).HasColumnName("GeneralCode");
             });
 
-
             modelBuilder.Entity<CleanModelInput>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -332,7 +414,6 @@ namespace PWCLayoutProcessingWebApp.Data
                 entity.Property(e => e.ItemNumber).HasColumnName("ItemNumber");
                 entity.Property(e => e.IgnoreInactiveItem).HasColumnName("IgnoreInactiveItem").HasConversion<int>();
                 entity.Property(e => e.IgnoreInactiveTask).HasColumnName("IgnoreInactiveTask").HasConversion<int>();
-
             });
         }
     }

@@ -9,6 +9,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The category controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class CategoryController : ControllerBase
@@ -21,6 +24,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CategoryController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public CategoryController(ILogger<CategoryController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -37,6 +48,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the category.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractCategory.</returns>
         [HttpGet("GetCategory")]
         public IEnumerable<Extract.ExtractCategory> GetCategory()
         {
@@ -55,6 +70,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractCategory.Map);
         }
 
+        /// <summary>
+        /// Gets the categories by name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractCategory.</returns>
         [HttpGet("GetCategoriesByName")]
         public IEnumerable<Extract.ExtractCategory> GetCategoriesByName([FromQuery] IEnumerable<string> name)
         {
@@ -78,10 +98,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractCategory.Map);
         }
 
+        /// <summary>
+        /// Adds the category.
+        /// </summary>
+        /// <param name="categories">The categories.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddCategory")]
         public ActionResult AddCategory(IEnumerable<Import.ImportCategory> categories)
         {
-
             Func<Category, Import.ImportCategory, bool> finder = (existingItem, importItem) =>
             {
                 return existingItem.CategoryName == importItem.CategoryName;
@@ -116,7 +140,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
                 Result.Error error => Ok(error),
                 _ => throw new NotImplementedException(),
             };
-
         }
     }
 }

@@ -9,6 +9,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The task owner controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class TaskOwnerController : ControllerBase
@@ -21,6 +24,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskOwnerController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public TaskOwnerController(ILogger<TaskOwnerController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -37,6 +48,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the task owners.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractTaskOwner.</returns>
         [HttpGet("GetTaskOwners")]
         public IEnumerable<Extract.ExtractTaskOwner> GetTaskOwners()
         {
@@ -55,6 +70,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractTaskOwner.Map);
         }
 
+        /// <summary>
+        /// Gets the task owners by code.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractTaskOwner.</returns>
         [HttpGet("GetTaskOwnerByCdode")]
         public IEnumerable<Extract.ExtractTaskOwner> GetTaskOwnersByCode([FromQuery] IEnumerable<string> name)
         {
@@ -78,27 +98,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractTaskOwner.Map);
         }
 
+        /// <summary>
+        /// Adds the task owners.
+        /// </summary>
+        /// <param name="owners">The owners.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddTaskOwner")]
         public ActionResult AddTaskOwners(IEnumerable<Import.ImportTaskOwner> owners)
         {
-            //if (owners is not null && owners.Any())
-            //{
-            //    foreach (TaskOwner item in owners)
-            //    {
-            //        if (!_dbContext.TaskOwners.Any(p => p.TaskOwnerCode == item.TaskOwnerCode))
-            //        {
-            //            _dbContext.TaskOwners.Add(item);
-            //        }
-            //        else if (_dbContext.TaskOwners.Any(p => p.TaskOwnerCode == item.TaskOwnerCode || p.TaskOwnerId == item.TaskOwnerId))
-            //        {
-            //            var owner = _dbContext.TaskOwners.FirstOrDefault(p => p.TaskOwnerCode == item.TaskOwnerCode);
-            //            _dbContext.Entry(owner).CurrentValues.SetValues(item);
-            //        }
-            //    }
-
-            //    var affectedItems = _dbContext.SaveChanges();
-            //}
-
             Func<TaskOwner, Import.ImportTaskOwner, bool> finder = (existingItem, importItem) =>
             {
                 return existingItem.TaskOwnerCode == importItem.TaskOwnerCode;
@@ -133,105 +140,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
                 Result.Error error => Ok(error),
                 _ => throw new NotImplementedException(),
             };
-
         }
-
-        #region commeted code for Running python script
-
-        /*
-        [HttpPost("RunScript")]
-        public void RunScript()
-        {
-            //ScriptEngine engine = Python.CreateEngine();
-            //var paths = engine.GetSearchPaths();
-            //paths.Add("C://Users//Mudit Aggarwal//AppData//Local//Programs//Python//Python310//Lib//site-packages");
-            //paths.Add("C://Users//Mudit Aggarwal//AppData//Local//Programs//Python//Python310//Lib");
-            //engine.SetSearchPaths(paths);
-
-            ////var scope = engine.ExecuteFile(@"C:\Users\Mudit Aggarwal\Downloads\test.py");
-            //var file= engine.CreateScriptSourceFromFile(@"C:\Users\Mudit Aggarwal\Downloads\test.py");
-            //var scope = engine.CreateScope();
-
-            //file.Execute(scope);
-            //dynamic x = scope.GetVariable("fu");
-            //var b = x();
-
-            //var a = "";
-
-            //ProcessStartInfo start = new ProcessStartInfo(@"C:\Users\Mudit Aggarwal\AppData\Local\Programs\Python\Python310\python.exe", @"C:\Users\Mudit Aggarwal\Downloads\test.py");
-            //ProcessStartInfo start = new ProcessStartInfo(@"C:\Users\Mudit Aggarwal\AppData\Roaming\Python\Python39\Scripts\ipython.exe", @"C:\Users\Mudit Aggarwal\Downloads\test.py");
-            ProcessStartInfo start = new ProcessStartInfo(@"C:\Users\Mudit Aggarwal\.conda\envs\capstone\python.exe", @"C:\Users\Mudit Aggarwal\Downloads\test.py");
-
-            start.UseShellExecute = false;
-            start.RedirectStandardOutput = true;
-            start.CreateNoWindow = true;
-            start.RedirectStandardError = true;
-
-            using (Process process = Process.Start(start))
-            {
-                {
-                    var read = process.StandardOutput.ReadToEnd();
-                    process.WaitForExit();
-                    Console.Write(read);
-                }
-            }
-        }
-        [HttpPost("RunScript1")]
-        public void RunScript_1()
-        {
-            ScriptEngine engine = IronPython.Hosting.Python.CreateEngine();
-            var paths = engine.GetSearchPaths();
-            //paths.Add("C://Users//Mudit Aggarwal//AppData//Roaming//Python//Python39//site-packages");
-            //paths.Add(@"C:\Users\Mudit Aggarwal\AppData\Roaming\Python\Python39");
-            //paths.Add(@"C:\Users\Mudit Aggarwal\AppData\Roaming\Python\Python39\Scripts");
-
-            //paths.Add(@"C:\Users\Mudit Aggarwal\AppData\Roaming\Python\Python39\site-packages\visions\backends");
-            paths.Add(@"C:\Users\Mudit Aggarwal\.conda\envs\capstone");
-            paths.Add(@"C:\Users\Mudit Aggarwal\.conda\envs\capstone\Lib");
-            paths.Add(@"C:\Users\Mudit Aggarwal\.conda\envs\capstone\Lib\site-packages");
-            //paths.Add("C://Users//Mudit Aggarwal//AppData//Local//Programs//Python//Python310//Lib");
-            //paths.Add(@"C:\Users\Mudit Aggarwal\AppData\Roaming\Python\Python310\Scripts");
-            //paths.Add("C://Users//Mudit Aggarwal//AppData//Local//Programs//Python//Python310//Lib//site-packages");
-            engine.SetSearchPaths(paths);
-
-            //var scope = engine.ExecuteFile(@"C:\Users\Mudit Aggarwal\Downloads\test.py");
-            var file = engine.CreateScriptSourceFromFile(@"C:\Users\Mudit Aggarwal\Downloads\test.py");
-            var scope = engine.CreateScope();
-
-            //file.GetCodeLines(1, 100);
-            file.Execute(scope);
-            dynamic x = scope.GetVariable("fu");
-            var b = x();
-
-            var a = "";
-        }
-
-        [HttpPost("RunScript2")]
-        public void RunScript_2()
-        {
-            Environment.SetEnvironmentVariable("PYTHONNET_PYDLL", @"C:\Users\Mudit Aggarwal\AppData\Local\Programs\Python\Python310.dll");
-
-            using (Py.GIL())
-            {
-                ScriptEngine engine = IronPython.Hosting.Python.CreateEngine();
-                var paths = engine.GetSearchPaths();
-                paths.Add("C://Users//Mudit Aggarwal//AppData//Roaming//Python//Python39//site-packages");
-                paths.Add(@"C:\Users\Mudit Aggarwal\AppData\Roaming\Python\Python39");
-                //paths.Add(@"C:\Users\Mudit Aggarwal\AppData\Roaming\Python\Python39\site-packages\visions\backends");
-                //paths.Add("C://Users//Mudit Aggarwal//AppData//Local//Programs//Python//Python310//Lib");
-                paths.Add(@"C:\Users\Mudit Aggarwal\AppData\Roaming\Python\Python310\Scripts");
-                //paths.Add("C://Users//Mudit Aggarwal//AppData//Local//Programs//Python//Python310//Lib//site-packages");
-                engine.SetSearchPaths(paths);
-
-                //var scope = engine.ExecuteFile(@"C:\Users\Mudit Aggarwal\Downloads\test.py");
-                var file = engine.CreateScriptSourceFromFile(@"C:\Users\Mudit Aggarwal\Downloads\test.py");
-
-                var code = file.Compile().ToString();
-                PythonEngine.RunSimpleString(code);
-            }
-        }
-        */
-
-        #endregion commeted code for Running python script
     }
 }

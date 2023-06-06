@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PWCLayoutProcessingWebApp.Data;
 using PWCLayoutProcessingWebApp.Models;
 using PWCLayoutProcessingWebApp.Models.Model;
@@ -10,6 +9,11 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.Modelling
 {
+#nullable enable
+
+    /// <summary>
+    /// The sequence similarity controller.
+    /// </summary>
     [ApiController]
     [Route("api/model/[controller]")]
     public class SequenceSimilarityController : Controller
@@ -22,6 +26,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SequenceSimilarityController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public SequenceSimilarityController(ILogger<SequenceSimilarityController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -40,6 +52,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
             }
         }
 
+        /// <summary>
+        /// Gets the sequence similarity.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractSequenceSimilarity.</returns>
         [HttpGet("GetSequenceSimilarity")]
         public IEnumerable<Extract.ExtractSequenceSimilarity> GetSequenceSimilarity()
         {
@@ -59,6 +75,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
             return result?.Select(Extract.ExtractSequenceSimilarity.Map);
         }
 
+        /// <summary>
+        /// Gets the cause codes.
+        /// </summary>
+        /// <param name="notificationCode">The notification code.</param>
+        /// <returns>A list of Extract.ExtractSequenceSimilarity.</returns>
         [HttpGet("GetSequenceSimilarityByNotification")]
         public IEnumerable<Extract.ExtractSequenceSimilarity> GetCauseCodes([FromQuery] string notificationCode)
         {
@@ -80,6 +101,12 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
             return result?.Select(Extract.ExtractSequenceSimilarity.Map);
         }
 
+        /// <summary>
+        /// Adds the sequence similarity.
+        /// </summary>
+        /// <param name="similarityScores">The similarity scores.</param>
+        /// <param name="runDate">The run date.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddSequenceSimilarity")]
         public ActionResult AddSequenceSimilarity(IEnumerable<Import.ImportSequenceSimilarity> similarityScores, DateTime runDate)
         {

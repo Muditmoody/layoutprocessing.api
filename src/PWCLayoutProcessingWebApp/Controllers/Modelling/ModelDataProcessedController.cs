@@ -10,6 +10,11 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.Modelling
 {
+#nullable enable
+
+    /// <summary>
+    /// The model data processed controller.
+    /// </summary>
     [ApiController]
     [Route("api/model/[controller]")]
     public class ModelDataProcessedController : Controller
@@ -22,6 +27,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModelDataProcessedController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public ModelDataProcessedController(ILogger<ModelDataProcessedController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -40,6 +53,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
             }
         }
 
+        /// <summary>
+        /// Gets the model clean data.
+        /// </summary>
+        /// <param name="train">If true, train.</param>
+        /// <returns>A list of Extract.ExtractCleanModelInput.</returns>
         [HttpGet("GetModelCleanData")]
         public IEnumerable<Extract.ExtractCleanModelInput> GetModelCleanData(bool train)
         {
@@ -61,7 +79,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
             return result?.Select(Extract.ExtractCleanModelInput.Map);
         }
 
-
+        /// <summary>
+        /// Gets the task duration predictions.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractTaskDurationPrediction.</returns>
         [HttpGet("GetTaskDurationPredictions")]
         public IEnumerable<Extract.ExtractTaskDurationPrediction> GetTaskDurationPredictions()
         {
@@ -83,13 +104,17 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
             return result?.Select(Extract.ExtractTaskDurationPrediction.Map);
         }
 
-
-
+        /// <summary>
+        /// Saves the clean model input.
+        /// </summary>
+        /// <param name="modelInputs">The model inputs.</param>
+        /// <param name="runDate">The run date.</param>
+        /// <param name="deleteExisting">If true, delete existing.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("SaveCleanModelInput")]
         public ActionResult SaveCleanModelInput(IEnumerable<Import.ImportCleanModelInput> modelInputs, DateTime runDate, bool deleteExisting)
         {
             runDate = runDate == default ? DateTime.Now : runDate;
-
 
             if (deleteExisting)
             {
@@ -102,7 +127,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
             }
 
             Func<CleanModelInput, Import.ImportCleanModelInput, bool> finder = (_, _) => false;
-
 
             Func<Import.ImportCleanModelInput, CleanModelInput, CleanModelInput> transformer = (importItem, existingItem) =>
             {
@@ -207,11 +231,17 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
             };
         }
 
+        /// <summary>
+        /// Saves the task duration result.
+        /// </summary>
+        /// <param name="durationPredictions">The duration predictions.</param>
+        /// <param name="runDate">The run date.</param>
+        /// <param name="deleteExisting">If true, delete existing.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("SaveTaskDurationResult")]
         public ActionResult SaveTaskDurationResult(IEnumerable<Import.ImportTaskDurationPrediction> durationPredictions, DateTime runDate, bool deleteExisting)
         {
             runDate = runDate == default ? DateTime.Now : runDate;
-
 
             if (deleteExisting)
             {
@@ -230,7 +260,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
 
             Func<TaskDurationPrediction, Import.ImportTaskDurationPrediction, bool> finder = (_, _) => false;
 
-
             Func<Import.ImportTaskDurationPrediction, TaskDurationPrediction, TaskDurationPrediction> transformer = (importItem, existingItem) =>
             {
                 if (existingItem is null)
@@ -242,7 +271,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.Modelling
                         ModelDataInput = findModelInput(importItem.ModelDataInputId),
                         PredictionResult = importItem.PredictionResult,
                         RunDate = runDate,
-
                     };
                 }
                 else

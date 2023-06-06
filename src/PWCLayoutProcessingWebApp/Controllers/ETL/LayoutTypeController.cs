@@ -10,6 +10,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The layoutType controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class LayoutTypeController : ControllerBase
@@ -22,6 +25,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LayoutTypeController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public LayoutTypeController(ILogger<LayoutTypeController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -38,6 +49,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the layout type.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractLayoutType.</returns>
         [HttpGet("GetLayoutTypes")]
         public IEnumerable<Extract.ExtractLayoutType> GetLayoutType()
         {
@@ -60,6 +75,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result.Select(Extract.ExtractLayoutType.Map);
         }
 
+        /// <summary>
+        /// Gets the layout type.
+        /// </summary>
+        /// <param name="notificationRef">The notification ref.</param>
+        /// <returns>A list of Extract.ExtractLayoutType.</returns>
         [HttpGet("GetLayoutTypeByNotification")]
         public IEnumerable<Extract.ExtractLayoutType> GetLayoutType([FromQuery] IEnumerable<string> notificationRef)
         {
@@ -86,15 +106,18 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result.Select(Extract.ExtractLayoutType.Map);
         }
 
+        /// <summary>
+        /// Adds the layout type.
+        /// </summary>
+        /// <param name="layoutTypes">The layout types.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddLayoutType")]
         public ActionResult AddLayoutType(IEnumerable<Import.ImportLayoutType> layoutTypes)
         {
-
             var damageCodes = _dbContext.DamageCodes.ToList();
             var causeCodes = _dbContext.CauseCodes.ToList();
 
             var enginePrograms = _dbContext.EnginePrograms.ToList();
-
 
             bool hasValidDamageCode(Import.ImportLayoutType item)
             {
@@ -113,7 +136,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
                 return enginePrograms.Select(c => c.EngineProgramId).ToList().Contains(item.NotificationId)
                       || enginePrograms.Select(c => c.NotificationCode).ToList().Contains(item.EngineProgramNotificationCode);
             }
-
 
             int getDamageCodeId(string damageCodeName)
             {
@@ -144,8 +166,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             {
                 return enginePrograms?.Find(c => c.EngineProgramId == engineProgramId);
             }
-
-
 
             var (toProcess, skippedItem) = layoutTypes.PartitionBy(i => hasValidCauseCode(i) && hasValidDamageCode(i));
 

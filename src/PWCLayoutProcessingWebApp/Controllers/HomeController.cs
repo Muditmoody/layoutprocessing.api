@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Components;
 using PWCLayoutProcessingWebApp.Models.ETL;
-using PWCLayoutProcessingWebApp.BusinessLogic;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using PWCLayoutProcessingWebApp.BusinessLogic;
 using PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers
@@ -16,6 +15,14 @@ namespace PWCLayoutProcessingWebApp.Controllers
         private readonly IActionDescriptorCollectionProvider _actionProvider;
         private readonly string _baseUrl;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HomeController"/> class.
+        /// </summary>
+        /// <param name="actionProvider">The action provider.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
         public HomeController(IActionDescriptorCollectionProvider actionProvider, ILogger<HomeController> logger, IConfiguration configuration, DatabaseProvider databaseProvider, QueryBuilder queryBuilder)
         {
             _logger = logger;
@@ -26,6 +33,10 @@ namespace PWCLayoutProcessingWebApp.Controllers
             _baseUrl = _configuration.GetConnectionString("BaseUrl");
         }
 
+        /// <summary>
+        /// Entry point for controller
+        /// </summary>
+        /// <returns>An IActionResult.</returns>
         public IActionResult Index()
         {
             var routes = _actionProvider.ActionDescriptors.Items.Where(x => x.AttributeRouteInfo == null);
@@ -52,6 +63,10 @@ namespace PWCLayoutProcessingWebApp.Controllers
             return View(dict);
         }
 
+        /// <summary>
+        /// Views the cause code.
+        /// </summary>
+        /// <returns>An IActionResult.</returns>
         public IActionResult ViewCauseCode()
         {
             var returnObj = new List<CauseCode>();
@@ -72,6 +87,10 @@ namespace PWCLayoutProcessingWebApp.Controllers
             return View("ViewP", returnObj);
         }
 
+        /// <summary>
+        /// Views the group code.
+        /// </summary>
+        /// <returns>An IActionResult.</returns>
         public IActionResult ViewGroupCode()
         {
             var returnObj = new List<CodeGroup>();
@@ -92,6 +111,10 @@ namespace PWCLayoutProcessingWebApp.Controllers
             return View("ViewP", returnObj);
         }
 
+        /// <summary>
+        /// Views the task code.
+        /// </summary>
+        /// <returns>An IActionResult.</returns>
         public IActionResult ViewTaskCode()
         {
             var returnObj = new List<ExtractTaskCode>();

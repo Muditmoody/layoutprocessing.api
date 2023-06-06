@@ -10,6 +10,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The material controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class MaterialController : ControllerBase
@@ -22,6 +25,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MaterialController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public MaterialController(ILogger<MaterialController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -38,6 +49,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the materials.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractMaterial.</returns>
         [HttpGet("GetMaterials")]
         public IEnumerable<Extract.ExtractMaterial> GetMaterials()
         {
@@ -56,6 +71,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractMaterial.Map);
         }
 
+        /// <summary>
+        /// Gets the materials by code.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractMaterial.</returns>
         [HttpGet("GetMaterialsByCode")]
         public IEnumerable<Extract.ExtractMaterial> GetMaterialsByCode([FromQuery] IEnumerable<string> name)
         {
@@ -80,6 +100,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractMaterial.Map);
         }
 
+        /// <summary>
+        /// Adds the material.
+        /// </summary>
+        /// <param name="materials">The materials.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddMaterial")]
         public ActionResult AddMaterial(IEnumerable<Import.ImportMaterial> materials)
         {

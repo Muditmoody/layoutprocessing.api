@@ -1,4 +1,3 @@
-using System.Net;
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +10,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The task code controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class TaskCodeController : ControllerBase
@@ -23,6 +25,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskCodeController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public TaskCodeController(ILogger<TaskCodeController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -39,6 +49,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the task codes.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractTaskCode.</returns>
         [HttpGet("GetTaskCodes")]
         public IEnumerable<Extract.ExtractTaskCode> GetTaskCodes()
         {
@@ -59,6 +73,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractTaskCode.Map);
         }
 
+        /// <summary>
+        /// Gets the task codes.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractTaskCode.</returns>
         [HttpGet("GetTaskCodeByName")]
         public IEnumerable<Extract.ExtractTaskCode> GetTaskCodes([FromQuery] IEnumerable<string> name)
         {
@@ -83,10 +102,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractTaskCode.Map);
         }
 
+        /// <summary>
+        /// Adds the task code.
+        /// </summary>
+        /// <param name="taskCodes">The task codes.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddTaskCode")]
         public ActionResult AddTaskCode(IEnumerable<Import.ImportTaskCode> taskCodes)
         {
-
             var groupCodes = _dbContext.GroupCodes.ToList();
 
             bool hasValidGroupCode(Import.ImportTaskCode item)

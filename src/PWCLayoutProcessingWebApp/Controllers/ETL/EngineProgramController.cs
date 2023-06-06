@@ -10,6 +10,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The engine program controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class EngineProgramController : ControllerBase
@@ -22,6 +25,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EngineProgramController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public EngineProgramController(ILogger<EngineProgramController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -38,6 +49,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the engine program.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractEngineProgram.</returns>
         [HttpGet("GetEnginePrograms")]
         public IEnumerable<Extract.ExtractEngineProgram> GetEngineProgram()
         {
@@ -56,6 +71,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result.Select(Extract.ExtractEngineProgram.Map);
         }
 
+        /// <summary>
+        /// Gets the engine program.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractEngineProgram.</returns>
         [HttpGet("GetEngineProgramByName")]
         public IEnumerable<Extract.ExtractEngineProgram> GetEngineProgram([FromQuery] IEnumerable<string> name)
         {
@@ -79,11 +99,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result.Select(Extract.ExtractEngineProgram.Map);
         }
 
-
+        /// <summary>
+        /// Adds the engine program.
+        /// </summary>
+        /// <param name="enginePrograms">The engine programs.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddEngineProgram")]
         public ActionResult AddEngineProgram(IEnumerable<Import.ImportEngineProgram> enginePrograms)
         {
-
             var codingCodes = _dbContext.CodingCodes.ToList();
 
             bool hasValidCodingCode(Import.ImportEngineProgram item)

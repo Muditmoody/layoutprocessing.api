@@ -1,3 +1,4 @@
+using Serilog;
 using PWCLayoutProcessingWebApp.Data;
 using PWCLayoutProcessingWebApp.BusinessLogic;
 
@@ -5,6 +6,10 @@ namespace PWCLayoutProcessingWebApp
 {
     public static class Program
     {
+        /// <summary>
+        /// Entry point for application
+        /// </summary>
+        /// <param name="args">The args.</param>
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -23,8 +28,16 @@ namespace PWCLayoutProcessingWebApp
             //options =>  options.UseSqlServer("Server=LAPTOP-HMF8Q5ET\\SQLEXPRESS;Initial Catalog=PWC_LayoutProcessing;Integrated Security=SSPI;TrustServerCertificate=True")
             );
 
-            var app = builder.Build();
+            var logger = new LoggerConfiguration()
+                            .ReadFrom.Configuration(new ConfigurationBuilder()
+                            .AddJsonFile("appsettings.json")
+                            .Build())
+                            .Enrich.FromLogContext()
+                            .WriteTo.Seq("http://localhost:5341/")
+                            .CreateLogger();
+            builder.Logging.AddSerilog(logger);
 
+            var app = builder.Build();
             app.UseStaticFiles();
             //app.Urls.Add("https://localhost:5001/");
             //app.Urls.Add("http://localhost:6001/");

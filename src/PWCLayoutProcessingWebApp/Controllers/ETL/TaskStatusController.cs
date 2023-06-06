@@ -8,6 +8,9 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The task status controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class TaskStatusController : ControllerBase
@@ -20,6 +23,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskStatusController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public TaskStatusController(ILogger<TaskStatusController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -36,6 +47,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the task statuses.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractTaskStatus.</returns>
         [HttpGet("GetTaskStatuses")]
         public IEnumerable<Extract.ExtractTaskStatus> GetTaskStatuses()
         {
@@ -54,6 +69,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractTaskStatus.Map);
         }
 
+        /// <summary>
+        /// Gets the task status by code.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractTaskStatus.</returns>
         [HttpGet("GetTaskStatusByCode")]
         public IEnumerable<Extract.ExtractTaskStatus> GetTaskStatusByCode([FromQuery] IEnumerable<string> name)
         {
@@ -77,6 +97,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractTaskStatus.Map);
         }
 
+        /// <summary>
+        /// Adds the task status.
+        /// </summary>
+        /// <param name="statuses">The statuses.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddTaskStatus")]
         public ActionResult AddTaskStatus(IEnumerable<Import.ImportTaskStatus> statuses)
         {
@@ -101,7 +126,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
                     };
                 }
             };
-
 
             var result = EntityUtil.AddEntity(_dbContext, _dbContext.TaskStatuses, statuses, finder, transformer, true);
 

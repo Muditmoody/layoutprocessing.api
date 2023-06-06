@@ -9,22 +9,33 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.ETL
 {
+    /// <summary>
+    /// The damage code controller.
+    /// </summary>
     [ApiController]
     [Route("api/etl/[controller]")]
     public class DamageCodeController : ControllerBase
     {
         private readonly ILogger<DamageCodeController> _logger;
-        private readonly IConfiguration _configuration;
         private readonly DatabaseProvider _databaseProvider;
         private readonly QueryBuilder _queryBuilder;
         private readonly LayoutProcessingDbContext _dbContext;
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DamageCodeController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public DamageCodeController(ILogger<DamageCodeController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
         {
+            IConfiguration _configuration;
             _logger = logger;
             _configuration = configuration;
             _databaseProvider = databaseProvider;
@@ -37,6 +48,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             }
         }
 
+        /// <summary>
+        /// Gets the damage code.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractDamageCode.</returns>
         [HttpGet("GetDamageCodes")]
         public IEnumerable<Extract.ExtractDamageCode> GetDamageCode()
         {
@@ -55,6 +70,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractDamageCode.Map);
         }
 
+        /// <summary>
+        /// Gets the damage code.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A list of Extract.ExtractDamageCode.</returns>
         [HttpGet("GetDamageCodeByName")]
         public IEnumerable<Extract.ExtractDamageCode> GetDamageCode([FromQuery] IEnumerable<string> name)
         {
@@ -78,6 +98,11 @@ namespace PWCLayoutProcessingWebApp.Controllers.ETL
             return result?.Select(Extract.ExtractDamageCode.Map);
         }
 
+        /// <summary>
+        /// Adds the damage code.
+        /// </summary>
+        /// <param name="damageCodes">The damage codes.</param>
+        /// <returns>An ActionResult.</returns>
         [HttpPost("AddDamageCode")]
         public ActionResult AddDamageCode(IEnumerable<Import.ImportDamageCode> damageCodes)
         {

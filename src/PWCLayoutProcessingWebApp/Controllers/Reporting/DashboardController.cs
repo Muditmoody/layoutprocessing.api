@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PWCLayoutProcessingWebApp.Data;
-using PWCLayoutProcessingWebApp.Models;
-using PWCLayoutProcessingWebApp.Models.ETL;
 using PWCLayoutProcessingWebApp.Models.Model;
 using PWCLayoutProcessingWebApp.BusinessLogic;
 using PWCLayoutProcessingWebApp.Models.Reporting;
@@ -11,11 +9,15 @@ using Extract = PWCLayoutProcessingWebApp.Models.Extract;
 
 namespace PWCLayoutProcessingWebApp.Controllers.Reporting
 {
+#nullable enable
+
+    /// <summary>
+    /// The dashboard controller.
+    /// </summary>
     [ApiController]
     [Route("api/dashboard/[controller]")]
     public class DashboardController : Controller
     {
-
         private readonly ILogger<DashboardController> _logger;
         private readonly IConfiguration _configuration;
         private readonly DatabaseProvider _databaseProvider;
@@ -24,6 +26,14 @@ namespace PWCLayoutProcessingWebApp.Controllers.Reporting
 
         private readonly bool _useQuery;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DashboardController"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="databaseProvider">The database provider.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="dbContext">The db context.</param>
         public DashboardController(ILogger<DashboardController> logger, IConfiguration configuration,
             DatabaseProvider databaseProvider, QueryBuilder queryBuilder,
             LayoutProcessingDbContext dbContext)
@@ -42,6 +52,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.Reporting
             }
         }
 
+        /// <summary>
+        /// Gets the sequence similarity.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractSequenceSimilarity.</returns>
         [HttpGet("GetSequenceSimilarity")]
         public IEnumerable<Extract.ExtractSequenceSimilarity> GetSequenceSimilarity()
         {
@@ -51,14 +65,12 @@ namespace PWCLayoutProcessingWebApp.Controllers.Reporting
             var maxRunDate = _dbContext.SequenceSimilarities.Max(r => r.RunDate);
             result = _dbContext.SequenceSimilarities.Where(r => r.RunDate == maxRunDate).Select(Extract.ExtractSequenceSimilarity.Map).ToList();
 
-
             if (result.Any())
             {
                 var layouts = _dbContext.LayoutTypes
                                       .Include(i => i.EngineProgram)
                                       .Select(l => new { Id = l.LayoutTypeId, ItemNumber = l.ItemNumber, NotificationCode = l.EngineProgram.NotificationCode })
                                       .ToDictionary(t => t.Id, t => new { t.ItemNumber, t.NotificationCode });
-
 
                 var layoutDurations = _dbContext.LayoutProcessingTasks
                                             .AsEnumerable()
@@ -74,8 +86,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.Reporting
                 var planningTaskCodes = _dbContext.PlanningTaskCodes
                                               .Include(e => e.TaskCode)
                                               .ToList();
-
-
 
                 var layoutDurationsNonePlanning = _dbContext.LayoutProcessingTasks
                                                 .AsEnumerable()
@@ -120,7 +130,7 @@ namespace PWCLayoutProcessingWebApp.Controllers.Reporting
                            if (hasReflayoutDurationMap)
                            {
                                var mapping = layoutDurations.GetValueOrDefault(i.LayoutIdRef);
-                               i.RefPastDuration = mapping.TotalDays/ mapping.TaskCount;
+                               i.RefPastDuration = mapping.TotalDays / mapping.TaskCount;
                            }
                            if (hasTestlayoutDurationMap)
                            {
@@ -141,14 +151,16 @@ namespace PWCLayoutProcessingWebApp.Controllers.Reporting
                                var mapping = layoutDurationsNonePlanning.GetValueOrDefault(i.LayoutIdTest);
                                i.TestTimeElapsedNonePlanning = mapping.TotalDays / mapping.TaskCount;
                            }
-
                        });
             }
 
             return result;
         }
 
-
+        /// <summary>
+        /// Gets the task duration predictions.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractTaskDurationPrediction.</returns>
         [HttpGet("GetTaskDurationPredictions")]
         public IEnumerable<Extract.ExtractTaskDurationPrediction> GetTaskDurationPredictions()
         {
@@ -170,6 +182,10 @@ namespace PWCLayoutProcessingWebApp.Controllers.Reporting
             return result?.Select(Extract.ExtractTaskDurationPrediction.Map);
         }
 
+        /// <summary>
+        /// Gets the dashboard descriptive data.
+        /// </summary>
+        /// <returns>A list of Extract.ExtractDescriptiveDashboardData.</returns>
         [HttpGet("GetDashboardDescriptiveData")]
         public IEnumerable<Extract.ExtractDescriptiveDashboardData> GetDashboardDescriptiveData()
         {
@@ -191,8 +207,6 @@ namespace PWCLayoutProcessingWebApp.Controllers.Reporting
                                     .Select(DescriptiveDashboardData.Map)
                                     .ToList();
 
-
-
                 result.ForEach(i => i.Description = (enginePrograms.FirstOrDefault(e => e.NotificationCode == i.Notification).Description));
                 result.ForEach(i => i.CodeGroupText = (codeGroups.FirstOrDefault(e => e.CodeGroupName == i.CodeGroup).CodeGroupText));
             }
@@ -200,7 +214,12 @@ namespace PWCLayoutProcessingWebApp.Controllers.Reporting
             return result?.Select(Extract.ExtractDescriptiveDashboardData.Map);
         }
 
-
+        /// <summary>
+        /// gets the duration.
+        /// </summary>
+        /// <param name="createdOn">The created on.</param>
+        /// <param name="completedOn">The completed on.</param>
+        /// <returns>An int.</returns>
         private static int getDuration(DateTime? createdOn, DateTime? completedOn)
         {
             var start = createdOn ?? DateTime.Today;
@@ -209,6 +228,5 @@ namespace PWCLayoutProcessingWebApp.Controllers.Reporting
             var days = (end - start).Days + 1;
             return days <= 0 ? 1 : days;
         }
-
     }
 }
